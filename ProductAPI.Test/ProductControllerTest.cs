@@ -7,14 +7,18 @@ using ProductBusiness.Dtos;
 using ProductAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace ProductAPI.Test
 {
     public class TestsFixture : IDisposable
     {
         public Mock<IProductService> mockProductService;
+        public Mock<ILogger<ProductController>> _logger;
         public TestsFixture()
         {
+            _logger = new Mock<ILogger<ProductController>>();
+
             mockProductService = new Mock<IProductService>();
             mockProductService.Setup(s => s.GetProduct("p01"))
                 .Returns(Task.FromResult(
@@ -54,8 +58,8 @@ namespace ProductAPI.Test
 
         [Fact]
         public void GetProductWithValidId()
-        {   
-            var controller = new ProductController(_fixture.mockProductService.Object);
+        {
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);
             var result = controller.GetProduct("p01").Result.Value;
             Assert.True(result.Id == "p01");            
         }
@@ -63,7 +67,7 @@ namespace ProductAPI.Test
         [Fact]
         public void GetProductWithInvalidId()
         {
-            var controller = new ProductController(_fixture.mockProductService.Object);
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);
             var result = controller.GetProduct("p02").Result.Value;
             Assert.Null(result);            
         }
@@ -71,7 +75,7 @@ namespace ProductAPI.Test
         [Fact]
         public void AddProductWithValidProductObject()
         {
-            var controller = new ProductController(_fixture.mockProductService.Object);
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);
             var productToCreate = new ProductDto()
             {
                 Id = "p01",
@@ -88,7 +92,7 @@ namespace ProductAPI.Test
         [Fact]
         public void AddProductWithInvalidProductId()
         {
-            var controller = new ProductController(_fixture.mockProductService.Object);
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);
             var productToCreate = new ProductDto()
             {
                 Id = "p p $",
@@ -103,7 +107,7 @@ namespace ProductAPI.Test
         [Fact]
         public void AddProductWithInvalidProductPrice()
         {
-            var controller = new ProductController(_fixture.mockProductService.Object);
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);
             var productToCreate = new ProductDto()
             {
                 Id = "p01",
@@ -118,7 +122,7 @@ namespace ProductAPI.Test
         [Fact]
         public void UpdateProductWithInvalidProductPrice()
         {
-            var controller = new ProductController(_fixture.mockProductService.Object);
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);
             var productToCreate = new ProductDto()
             {
                 Id = "p01",
@@ -133,7 +137,7 @@ namespace ProductAPI.Test
         [Fact]
         public void UpdateProductWithValidProductObject()
         {
-            var controller = new ProductController(_fixture.mockProductService.Object);
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);
             var productToCreate = new ProductDto()
             {
                 Id = "p01",
@@ -149,7 +153,7 @@ namespace ProductAPI.Test
         [Fact]
         public void DeleteProductWithValidProductId()
         {
-            var controller = new ProductController(_fixture.mockProductService.Object);            
+            var controller = new ProductController(_fixture.mockProductService.Object, _fixture._logger.Object);            
             var result = controller.Delete("p01").Result;           
 
             Assert.NotNull(result);
