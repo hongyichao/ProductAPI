@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ProductBusiness.Dtos;
-using ProductEntity;
 
 namespace ProductBusiness.Validator
 {

@@ -25,7 +25,7 @@ namespace ProductAPI.Controllers
         }
 
         [HttpGet("Products")]
-        public async Task<IActionResult> GetProducts(string id)
+        public async Task<IActionResult> GetProducts()
         {
             try
             {
