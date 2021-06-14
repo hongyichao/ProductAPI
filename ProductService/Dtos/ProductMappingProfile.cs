@@ -8,7 +8,7 @@ namespace ProductBusiness.Dtos
         public ProductMappingProfile()
         {
             CreateMap<Product, ProductDto>();
-            CreateMap<ProductDto, Product>();
+            CreateMap<ProductDto, Product>();            
         }
     }
 }
