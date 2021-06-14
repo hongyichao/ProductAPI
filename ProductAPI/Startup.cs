@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using ProductBusiness;
 using AutoMapper;
 using ProductBusiness.Dtos;
+using FluentValidation.AspNetCore;
+using ProductBusiness.Validator;
 
 namespace ProductAPI
 {
@@ -52,6 +54,7 @@ namespace ProductAPI
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductValidator>());
         }
                 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
