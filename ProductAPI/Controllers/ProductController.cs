@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ProductBusiness;
 using ProductBusiness.Dtos;
 using ProductBusiness.Validator;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace ProductAPI.Controllers
 {
@@ -17,7 +17,7 @@ namespace ProductAPI.Controllers
         private ILogger<ProductController> _logger;
 
         public ProductController(IProductService productService
-            , ILogger<ProductController> logger) 
+            , ILogger<ProductController> logger)
         {
             _productService = productService;
             _productValidator = new ProductValidator();
@@ -32,19 +32,19 @@ namespace ProductAPI.Controllers
                 var productsToReturn = await _productService.GetProducts();
                 return Ok(productsToReturn);
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return StatusCode(500);
             }
-            
+
         }
 
 
         [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<ProductDto>> GetProduct(string id)
         {
-            try 
+            try
             {
                 if (string.IsNullOrWhiteSpace(id))
                 {
@@ -67,7 +67,7 @@ namespace ProductAPI.Controllers
             }
         }
 
-        [HttpPost("Add")]        
+        [HttpPost("Add")]
         public async Task<ActionResult<ProductDto>> Create(ProductDto productDto)
         {
             try
@@ -95,7 +95,7 @@ namespace ProductAPI.Controllers
         [HttpPost("Update")]
         public async Task<ActionResult<ProductDto>> Update(ProductDto productDto)
         {
-            try 
+            try
             {
                 var result = _productValidator.Validate(productDto);
 
@@ -136,7 +136,7 @@ namespace ProductAPI.Controllers
             }
             catch (InvalidOperationException ope)
             {
-                throw new InvalidOperationException("Error deleting the product");
+                throw new InvalidOperationException($"Error deleting the product. {ope.Message}");
             }
             catch (Exception e)
             {
