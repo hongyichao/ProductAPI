@@ -36,6 +36,8 @@ namespace ProductRepositories.MongoDB
 
         public async Task<string> UpdateProduct(Product product)
         {
+            product.UpdatedTimestamp = DateTimeOffset.UtcNow;
+
             await _context.Products.ReplaceOneAsync(p => p.Id == product.Id, product);
 
             return product.Id;
@@ -57,7 +59,7 @@ namespace ProductRepositories.MongoDB
             }
             catch (Exception e)
             {
-                var tmp = e.Message;
+                throw;
             }
 
 

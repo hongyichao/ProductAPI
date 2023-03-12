@@ -17,8 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductData\ProductData.csproj" />
-    <ProjectReference Include="..\ProductEntity\ProductEntity.csproj" />
     <ProjectReference Include="..\ProductRepositories\ProductRepositories.csproj" />
     <ProjectReference Include="..\ProductService\ProductBusiness.csproj" />
   </ItemGroup>

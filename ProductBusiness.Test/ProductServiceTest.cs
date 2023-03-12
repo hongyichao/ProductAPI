@@ -1,11 +1,12 @@
-using ProductData;
-using System;
-using Xunit;
-using Moq;
-using System.Threading.Tasks;
-using ProductBusiness.Dtos;
-using ProductEntity;
 using AutoMapper;
+using Moq;
+using ProductBusiness.Dtos;
+using ProductRepositories;
+using ProductRepositories.MongoDB.DataModels;
+using System;
+using System.Threading.Tasks;
+using Xunit;
+
 
 namespace ProductBusiness.Test
 {
@@ -154,7 +155,7 @@ namespace ProductBusiness.Test
                 Price = new decimal(10)
             };
             var result = service.UpdateProduct(productToUpdate).Result;
-            Assert.Null(result);            
+            Assert.Null(result);
         }
 
         [Fact]
