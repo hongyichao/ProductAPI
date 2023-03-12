@@ -9,7 +9,6 @@ using Microsoft.OpenApi.Models;
 using ProductBusiness;
 using ProductBusiness.Dtos;
 using ProductBusiness.Validator;
-//using ProductData;
 using ProductRepositories;
 using ProductRepositories.MongoDB;
 

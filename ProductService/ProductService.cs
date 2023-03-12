@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
+using MongoDB.Bson;
 using ProductBusiness.Dtos;
 using ProductRepositories;
-//using ProductEntity;
-//using ProductData;
 using ProductRepositories.MongoDB.DataModels;
 using System;
 using System.Collections.Generic;
@@ -30,23 +29,21 @@ namespace ProductBusiness
 
         public async Task<string> AddProduct(ProductDto productDto)
         {
-            if (await _productRepository.ProductExists(productDto.Id))
-                return null;
-
             try
             {
+                if (await _productRepository.ProductExists($"{productDto.Group}-{productDto.Name}"))
+                    return null;
+
                 var productToAdd = _mapper.Map<Product>(productDto);
+
+                productToAdd.Id = ObjectId.GenerateNewId().ToString();
 
                 return (await _productRepository.AddProduct(productToAdd)).Id;
             }
             catch (Exception e)
             {
-                var tmp = e.Message;
+                throw;
             }
-
-            return null;
-
-
         }
 
         public async Task<ProductDto> GetProduct(string id)
@@ -60,23 +57,26 @@ namespace ProductBusiness
 
         public async Task<string> UpdateProduct(ProductDto productDto)
         {
-            if (!(await _productRepository.ProductExists(productDto.Id)))
+            var existingProduct = await _productRepository.GetProduct($"{productDto.Group}-{productDto.Name}");
+
+            if (existingProduct == null)
             {
                 return null;
             }
 
             var productToUpdate = _mapper.Map<Product>(productDto);
+
+            productToUpdate.Id = existingProduct.Id;
+
             return await _productRepository.UpdateProduct(productToUpdate);
         }
 
-        public async Task<bool> DeleteProduct(string id)
+        public async Task<bool> DeleteProduct(string nameId)
         {
-            if (!(await _productRepository.ProductExists(id)))
-            {
-                return false;
-            }
+            var productToDelete = await _productRepository.GetProduct(nameId);
 
-            var productToDelete = await _productRepository.GetProduct(id);
+            if (productToDelete == null)
+                return false;
 
             await _productRepository.DeleteProduct(productToDelete);
 

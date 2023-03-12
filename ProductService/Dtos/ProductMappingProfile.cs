@@ -8,7 +8,8 @@ namespace ProductBusiness.Dtos
         public ProductMappingProfile()
         {
             CreateMap<Product, ProductDto>();
-            CreateMap<ProductDto, Product>();
+            CreateMap<ProductDto, Product>()
+                .ForMember(dest => dest.NameId, act => act.MapFrom(src => $"{src.Group}-{src.Name}"));
         }
     }
 }

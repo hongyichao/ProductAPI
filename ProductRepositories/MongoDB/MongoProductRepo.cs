@@ -14,7 +14,7 @@ namespace ProductRepositories.MongoDB
 
         public async Task<List<Product>> GetProducts()
         {
-            var result = await _context.Products.FindAsync(p => p.Price > 10);
+            var result = await _context.Products.FindAsync(p => true);
 
             return await result.ToListAsync();
         }
@@ -28,9 +28,9 @@ namespace ProductRepositories.MongoDB
             return product;
         }
 
-        public async Task<Product> GetProduct(string id)
+        public async Task<Product> GetProduct(string nameId)
         {
-            var result = await _context.Products.FindAsync(p => p.Id == id);
+            var result = await _context.Products.FindAsync(p => p.NameId == nameId);
             return await result.FirstOrDefaultAsync();
         }
 
@@ -48,11 +48,11 @@ namespace ProductRepositories.MongoDB
             await _context.Products.DeleteOneAsync(p => p.Id == product.Id);
         }
 
-        public async Task<bool> ProductExists(string id)
+        public async Task<bool> ProductExists(string nameId)
         {
             try
             {
-                var result = await _context.Products.FindAsync(p => p.Id == id);
+                var result = await _context.Products.FindAsync(p => p.NameId == nameId);
 
                 if (await result.AnyAsync())
                     return true;
