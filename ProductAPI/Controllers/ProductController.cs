@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using ProductBusiness;
 using ProductBusiness.Dtos;
 using ProductBusiness.Validator;
@@ -78,6 +79,8 @@ namespace ProductAPI.Controllers
                 {
                     return BadRequest(result.Errors);
                 }
+
+                productDto.Id = ObjectId.GenerateNewId().ToString();
 
                 var createdProductId = await _productService.AddProduct(productDto);
 

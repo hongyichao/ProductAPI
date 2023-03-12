@@ -48,10 +48,18 @@ namespace ProductRepositories.MongoDB
 
         public async Task<bool> ProductExists(string id)
         {
-            var result = await _context.Products.FindAsync(p => p.Id == id);
+            try
+            {
+                var result = await _context.Products.FindAsync(p => p.Id == id);
 
-            if (await result.AnyAsync())
-                return true;
+                if (await result.AnyAsync())
+                    return true;
+            }
+            catch (Exception e)
+            {
+                var tmp = e.Message;
+            }
+
 
             return false;
         }

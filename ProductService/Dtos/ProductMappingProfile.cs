@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using ProductEntity;
+using ProductRepositories.MongoDB.DataModels;
 
 namespace ProductBusiness.Dtos
 {
-    public class ProductMappingProfile: Profile
-    {        
+    public class ProductMappingProfile : Profile
+    {
         public ProductMappingProfile()
         {
             CreateMap<Product, ProductDto>();
-            CreateMap<ProductDto, Product>();            
+            CreateMap<ProductDto, Product>();
         }
     }
 }

@@ -1,9 +1,12 @@
-﻿using ProductData;
-using ProductEntity;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ProductBusiness.Dtos;
+using ProductRepositories;
+//using ProductEntity;
+//using ProductData;
+using ProductRepositories.MongoDB.DataModels;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProductBusiness
 {
@@ -12,13 +15,13 @@ namespace ProductBusiness
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository productRepository, IMapper mapper) 
+        public ProductService(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;
         }
 
-        public async Task<List<ProductDto>> GetProducts() 
+        public async Task<List<ProductDto>> GetProducts()
         {
             var dbProducts = await _productRepository.GetProducts();
 
@@ -30,9 +33,20 @@ namespace ProductBusiness
             if (await _productRepository.ProductExists(productDto.Id))
                 return null;
 
-            var productToAdd = _mapper.Map<Product>(productDto);
+            try
+            {
+                var productToAdd = _mapper.Map<Product>(productDto);
 
-            return (await _productRepository.AddProduct(productToAdd)).Id;
+                return (await _productRepository.AddProduct(productToAdd)).Id;
+            }
+            catch (Exception e)
+            {
+                var tmp = e.Message;
+            }
+
+            return null;
+
+
         }
 
         public async Task<ProductDto> GetProduct(string id)

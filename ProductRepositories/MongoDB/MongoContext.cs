@@ -9,7 +9,7 @@ namespace ProductRepositories.MongoDB
 
         public MongoContext(string connectionString) : base(connectionString)
         {
-            var database = GetDatabase("chydb");
+            var database = GetDatabase("local");
             Products = database.GetCollection<Product>("products");
         }
     }
